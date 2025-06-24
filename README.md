@@ -49,8 +49,6 @@ client/index.html 파일을 브라우저에서 열면 됩니다.
 
 📂 폴더 구조
 pgsql
-복사
-편집
 ai_website_pj/
 ├── client/               # 클라이언트 HTML + JS
 │   └── index.html
