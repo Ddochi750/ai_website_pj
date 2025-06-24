@@ -2,142 +2,158 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>가게 웹사이트 자동 생성기</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 웹사이트 생성기 - 심플 에디터 MVP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       background-color: #f8f9fa;
       font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
-      padding-top: 60px;
+      padding: 40px 20px;
     }
-    .card {
-      border-radius: 12px;
-      border: 1px solid #dee2e6;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    #previewFrame {
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
-    .form-label {
-      font-weight: 500;
-    }
-    .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: #0b5ed7;
-    }
-    .result-box {
-      white-space: pre-wrap;
-      background: #f1f3f5;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #dee2e6;
+    #codeEditor {
+      width: 100%;
+      height: 200px;
+      margin-top: 12px;
+      font-family: monospace;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 12px;
+      resize: vertical;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="mb-5 text-center">
-      <h2 class="fw-bold">가게 웹사이트 자동 생성</h2>
-      <p class="text-muted">필요한 정보를 입력하면 바로 HTML 웹사이트 코드를 생성해 드립니다.</p>
-    </div>
+    <h2 class="mb-4 text-center">AI 웹사이트 자동 생성기 (심플 에디터 MVP)</h2>
 
-    <div class="card p-4 mb-4" id="formSection">
-      <form id="websiteForm">
-        <div class="mb-3">
-          <label for="businessType" class="form-label">업종</label>
-          <select id="businessType" class="form-select" required>
-            <option value="">선택하세요</option>
-            <option value="카페">카페</option>
-            <option value="식당">식당</option>
-            <option value="미용실">미용실</option>
-            <option value="치킨집">치킨집</option>
-            <option value="분식집">분식집</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="businessName" class="form-label">가게 이름</label>
-          <input type="text" id="businessName" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label for="address" class="form-label">주소</label>
-          <input type="text" id="address" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label for="phone" class="form-label">전화번호</label>
-          <input type="tel" id="phone" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label for="hours" class="form-label">운영시간</label>
-          <input type="text" id="hours" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">가게 소개</label>
-          <textarea id="description" class="form-control" rows="3"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">웹사이트 생성하기</button>
-      </form>
-    </div>
+    <form id="websiteForm" class="mb-4">
+      <div class="mb-3">
+        <label for="businessType" class="form-label">업종</label>
+        <select id="businessType" class="form-select" required>
+          <option value="">선택하세요</option>
+          <option value="카페">카페</option>
+          <option value="식당">식당</option>
+          <option value="미용실">미용실</option>
+          <option value="치킨집">치킨집</option>
+          <option value="분식집">분식집</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="businessName" class="form-label">가게 이름</label>
+        <input type="text" id="businessName" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">주소</label>
+        <input type="text" id="address" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">전화번호</label>
+        <input type="tel" id="phone" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="hours" class="form-label">운영시간</label>
+        <input type="text" id="hours" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">가게 소개</label>
+        <textarea id="description" class="form-control" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">웹사이트 초안 생성</button>
+    </form>
 
-    <div id="loading" class="text-center my-4" style="display: none;">
+    <div id="loading" class="text-center my-3" style="display:none;">
       <div class="spinner-border text-primary" role="status"></div>
-      <p class="mt-2 text-muted">웹사이트를 생성 중입니다...</p>
+      <p class="mt-2 text-muted">AI가 웹사이트 코드를 생성 중입니다...</p>
     </div>
 
-    <div id="result" class="card p-4 mb-4" style="display: none;">
-      <h5 class="mb-3">완성된 HTML 코드</h5>
-      <div id="websitePreview" class="result-box mb-3"></div>
-      <button class="btn btn-outline-primary w-100 mb-2" id="copyBtn">HTML 코드 복사</button>
-      <button class="btn btn-outline-secondary w-100" id="newBtn">다시 만들기</button>
+    <h5>웹사이트 미리보기</h5>
+    <iframe id="previewFrame"></iframe>
+
+    <h5 class="mt-4">코드 편집</h5>
+    <textarea id="codeEditor" placeholder="AI가 생성한 코드를 여기서 편집할 수 있어요"></textarea>
+
+    <div class="mt-3">
+      <textarea id="llmInstruction" class="form-control mb-2" placeholder="예: 배경색을 어둡게 바꿔줘, 버튼 색을 빨간색으로 변경해줘"></textarea>
+      <button id="applyChanges" class="btn btn-warning w-100">AI에게 꾸미기 요청</button>
     </div>
   </div>
 
   <script>
-    let generatedHTML = '';
+    const websiteForm = document.getElementById('websiteForm');
+    const loadingEl = document.getElementById('loading');
+    const previewFrame = document.getElementById('previewFrame');
+    const codeEditor = document.getElementById('codeEditor');
+    const llmInstruction = document.getElementById('llmInstruction');
+    const applyChangesBtn = document.getElementById('applyChanges');
 
-    document.getElementById('websiteForm').addEventListener('submit', async function(e) {
+    let currentHTML = '';
+
+    // 웹사이트 초안 생성
+    websiteForm.addEventListener('submit', async e => {
       e.preventDefault();
+      loadingEl.style.display = 'block';
 
-      const formData = {
+      const data = {
         businessType: document.getElementById('businessType').value,
         businessName: document.getElementById('businessName').value,
         address: document.getElementById('address').value,
         phone: document.getElementById('phone').value,
         hours: document.getElementById('hours').value,
-        description: document.getElementById('description').value
+        description: document.getElementById('description').value,
       };
-
-      document.getElementById('formSection').style.display = 'none';
-      document.getElementById('loading').style.display = 'block';
 
       try {
         const res = await fetch('http://localhost:3000/generate-html', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(data)
         });
-        const result = await res.json();
-        generatedHTML = result.html;
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('websitePreview').innerText = generatedHTML;
-      } catch (err) {
-        alert('웹사이트 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
-        document.getElementById('formSection').style.display = 'block';
-        document.getElementById('loading').style.display = 'none';
+        const json = await res.json();
+        currentHTML = json.html || '<p>HTML 생성 실패</p>';
+
+        previewFrame.srcdoc = currentHTML;
+        codeEditor.value = currentHTML;
+      } catch (error) {
+        alert('웹사이트 생성 중 오류가 발생했습니다.');
+      } finally {
+        loadingEl.style.display = 'none';
       }
     });
 
-    document.getElementById('copyBtn').addEventListener('click', function() {
-      navigator.clipboard.writeText(generatedHTML).then(() => {
-        alert('HTML 코드가 복사되었습니다. 메모장에 붙여넣어 저장하세요.');
-      });
-    });
+    // AI 꾸미기 요청
+    applyChangesBtn.addEventListener('click', async () => {
+      const instruction = llmInstruction.value.trim();
+      if (!instruction) {
+        alert('꾸미기 요청 내용을 입력해주세요.');
+        return;
+      }
 
-    document.getElementById('newBtn').addEventListener('click', function() {
-      document.getElementById('result').style.display = 'none';
-      document.getElementById('formSection').style.display = 'block';
-      document.getElementById('websiteForm').reset();
+      loadingEl.style.display = 'block';
+
+      try {
+        const res = await fetch('http://localhost:3000/edit-html', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ html: codeEditor.value, instruction })
+        });
+        const json = await res.json();
+        currentHTML = json.html || currentHTML;
+
+        previewFrame.srcdoc = currentHTML;
+        codeEditor.value = currentHTML;
+      } catch (error) {
+        alert('AI 꾸미기 요청 중 오류가 발생했습니다.');
+      } finally {
+        loadingEl.style.display = 'none';
+      }
     });
   </script>
 </body>
