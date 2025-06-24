@@ -30,3 +30,51 @@
 ```bash
 git clone https://github.com/Ddochi750/ai_website_pj.git
 cd ai_website_pj
+
+2. 서버 실행
+bash
+복사
+편집
+cd server
+npm install
+node server.js
+.env 파일에 다음과 같이 API 키를 추가해야 합니다:
+
+ini
+복사
+편집
+GROQ_API_KEY=여기에_당신의_API_키_입력
+3. 클라이언트 실행
+client/index.html 파일을 브라우저에서 열면 됩니다.
+
+📂 폴더 구조
+pgsql
+복사
+편집
+ai_website_pj/
+├── client/               # 클라이언트 HTML + JS
+│   └── index.html
+├── server/               # 서버 Node.js + Groq API
+│   ├── server.js
+│   └── .env
+├── package.json
+├── README.md
+
+💡 향후 개선 아이디어
+다양한 템플릿 선택 기능
+
+사용자 계정 & 저장 기능
+
+다국어 지원 (영어/한국어)
+
+Vercel, Netlify로 배포 연동
+
+유료버전
+
+👩‍💻 제작자
+뚜치(Ddochi)
+처음으로 만든 AI 웹 프로젝트입니다.
+직접 만들고 직접 연결하고, 정말 뿌듯한 결과물이에요! 😎
+
+GitHub: https://github.com/Ddochi750
+
