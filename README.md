@@ -33,16 +33,12 @@ cd ai_website_pj
 
 2. 서버 실행
 bash
-복사
-편집
 cd server
 npm install
 node server.js
 .env 파일에 다음과 같이 API 키를 추가해야 합니다:
 
 ini
-복사
-편집
 GROQ_API_KEY=여기에_당신의_API_키_입력
 3. 클라이언트 실행
 client/index.html 파일을 브라우저에서 열면 됩니다.
